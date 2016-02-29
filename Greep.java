@@ -10,7 +10,7 @@ public class Greep extends Creature
 {
     // Remember: you cannot extend the Greep's memory. So:
     // no additional fields (other than final fields) allowed in this class!
-    
+
     /**
      * Default constructor for testing purposes.
      */
@@ -19,7 +19,6 @@ public class Greep extends Creature
         this(null);
     }
 
-    
     /**
      * Create a Greep with its home space ship.
      */
@@ -27,7 +26,6 @@ public class Greep extends Creature
     {
         super(ship);
     }
-    
 
     /**
      * Do what a greep's gotta do.
@@ -35,34 +33,61 @@ public class Greep extends Creature
     public void act()
     {
         super.act();   // do not delete! leave as first statement in act().
-        
+
         if (carryingTomato()) {
-            if(atShip()) {
-                dropTomato();
-            }
-            else {
-                move();
-                if(atWorldEdge())
-                {
-                turn(10);
-                }
-                else if(atWater())
-                {
-                turn(10);
-                } 
-            }
+            carryingTomatoAct();
         }
         else {
+            notCarryingTomatoAct();
+        }
+    }
+
+    public void carryingTomatoAct()
+    {
+        if(atShip()) {
+            dropTomato();
+            turn(180);
             move();
-            if(atWorldEdge())
+        }
+        else {
+            if(atWorldEdge()|| atWater())
             {
-                turn(10);
+                turn(Greenfoot.getRandomNumber(30) + 60);
+                move();
             }
-            else if(atWater())
+            else
             {
-                turn(10);
-            }    
-            checkFood();
+                turnHome();
+                move();
+            }
+        }
+    }
+
+    public void notCarryingTomatoAct()
+    {
+        move();
+        if(atWorldEdge())
+        {
+            randomTurn();
+            move();
+        }
+        else if(atWater())
+        {
+            randomTurn();
+            move();
+        }    
+        checkFood();
+    }
+
+    public void randomTurn()
+    {
+        if(randomChance(50))
+        {
+            turn(Greenfoot.getRandomNumber(30) - 60);   
+        }
+        else
+        {
+            turn(Greenfoot.getRandomNumber(30) + 60); 
         }
     }
 
@@ -80,7 +105,6 @@ public class Greep extends Creature
         }
     }
 
-
     /**
      * This method specifies the name of the author (for display on the result board).
      */
@@ -88,7 +112,6 @@ public class Greep extends Creature
     {
         return "Ali Boubezari";  // write your name here!
     }
-
 
     /**
      * This method specifies the image we want displayed at any time. (No need 
